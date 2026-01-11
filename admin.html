@@ -1,19 +1,44 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>Visitor Logs</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; font-family: Arial; }
+    th, td { border: 1px solid #ccc; padding: 6px; font-size: 12px; }
+    th { background: #222; color: white; }
+  </style>
+</head>
 <body>
-  <h2>Visitor Logs</h2>
-  <pre id="data">Loading...</pre>
+<h2>Visitor Logs</h2>
+<table id="table">
+  <thead>
+    <tr>
+      <th>IP</th><th>Country</th><th>Region</th><th>City</th>
+      <th>ISP</th><th>OS</th><th>Page</th><th>Referrer</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
-  <script>
-    fetch('/api/visitors')   // MUST be visitors, not log
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('data').textContent =
-          JSON.stringify(data, null, 2);
-      })
-      .catch(err => {
-        document.getElementById('data').textContent = "Error: " + err;
-      });
-  </script>
+<script>
+fetch('/api/visitors')
+  .then(r => r.json())
+  .then(data => {
+    const tbody = document.querySelector("#table tbody");
+    data.forEach(v => {
+      const row = `<tr>
+        <td>${v.ip}</td>
+        <td>${v.country}</td>
+        <td>${v.region}</td>
+        <td>${v.city}</td>
+        <td>${v.isp}</td>
+        <td>${v.os}</td>
+        <td>${v.page}</td>
+        <td>${v.referrer}</td>
+      </tr>`;
+      tbody.innerHTML += row;
+    });
+  });
+</script>
 </body>
 </html>
