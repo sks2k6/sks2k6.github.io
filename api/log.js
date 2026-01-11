@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   const SUPABASE_URL = "https://kjyzjgxusouthqxrebdt.supabase.co";
-  const SUPABASE_KEY = "sb_secret_vPRJvXC3a4zlvzI8gSUcgw_jPx7qZfm";
+  const SUPABASE_KEY = "sb_publishable_sUEv6TQ39NRzaafzTPGpMQ_zufoSyMX";
 
   const ip =
     req.headers["x-forwarded-for"]?.split(",")[0] ||
