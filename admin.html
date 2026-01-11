@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h2>Visitor Logs</h2>
-<pre id="data">Loading...</pre>
+  <h2>Visitor Logs</h2>
+  <pre id="data">Loading...</pre>
 
-<script>
-fetch('/api/visitors')
-  .then(r => r.json())
-  .then(d => {
-    document.getElementById("data").textContent =
-      JSON.stringify(d, null, 2);
-  });
-</script>
+  <script>
+    fetch('/api/visitors')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('data').textContent =
+          JSON.stringify(data, null, 2);
+      })
+      .catch(err => {
+        document.getElementById('data').textContent = "Error: " + err;
+      });
+  </script>
 </body>
 </html>
