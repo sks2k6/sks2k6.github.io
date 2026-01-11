@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     "unknown";
 
   const userAgent = req.headers["user-agent"] || "unknown";
-  const referrer = req.headers["referer"] || "Direct";
+  const referrer = req.query.ref || "Direct";
   const page = req.query.page || "/";
 
   try {
