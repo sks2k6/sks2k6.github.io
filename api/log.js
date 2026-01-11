@@ -8,8 +8,12 @@ export default async function handler(req, res) {
     "unknown";
 
   const userAgent = req.headers["user-agent"] || "unknown";
-  const referrer = req.query.ref || "Direct";
+
+  // Values sent from browser
   const page = req.query.page || "/";
+  const referrer = req.query.ref || "Direct";
+  const visitTime = req.query.time || new Date().toISOString();
+  const clientTimezone = req.query.tz || null;
 
   try {
     // 🌍 Geo lookup
@@ -19,31 +23,31 @@ export default async function handler(req, res) {
     const country = geo.country || null;
     const region = geo.region || null;
     const city = geo.city || null;
-    const timezone = geo.timezone?.id || null;
     const isp = geo.connection?.isp || null;
     const latitude = geo.latitude || null;
     const longitude = geo.longitude || null;
 
-    // 🖥️ OS detection
+    // 🖥 OS detection
     const os = userAgent.includes("Android") ? "Android"
       : userAgent.includes("Windows") ? "Windows"
       : userAgent.includes("iPhone") || userAgent.includes("iOS") ? "iOS"
       : userAgent.includes("Mac") ? "Mac"
       : "Other";
 
-    // 📦 Build data object
+    // 📦 Final data object
     const data = {
       ip,
       country,
       region,
       city,
-      timezone,
+      timezone: clientTimezone,
       isp,
       latitude,
       longitude,
       os,
       referrer,
-      page
+      page,
+      created_at: visitTime
     };
 
     // 💾 Save to Supabase
