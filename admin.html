@@ -3,18 +3,31 @@
 <head>
   <title>Visitor Logs</title>
   <style>
-    table { border-collapse: collapse; width: 100%; font-family: Arial; }
-    th, td { border: 1px solid #ccc; padding: 6px; font-size: 12px; }
-    th { background: #222; color: white; }
+    body { font-family: Arial; }
+    table { border-collapse: collapse; width: 100%; font-size: 12px; }
+    th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+    th { background: #222; color: white; position: sticky; top: 0; }
+    tr:nth-child(even) { background: #f5f5f5; }
   </style>
 </head>
 <body>
+
 <h2>Visitor Logs</h2>
+
 <table id="table">
   <thead>
     <tr>
-      <th>IP</th><th>Country</th><th>Region</th><th>City</th>
-      <th>ISP</th><th>OS</th><th>Page</th><th>Referrer</th>
+      <th>IP</th>
+      <th>Country</th>
+      <th>Region</th>
+      <th>City</th>
+      <th>Timezone</th>
+      <th>ISP</th>
+      <th>OS</th>
+      <th>Page</th>
+      <th>Referrer</th>
+      <th>Time</th>
+      <th>Map</th>
     </tr>
   </thead>
   <tbody></tbody>
@@ -22,23 +35,39 @@
 
 <script>
 fetch('/api/visitors')
-  .then(r => r.json())
+  .then(res => res.json())
   .then(data => {
     const tbody = document.querySelector("#table tbody");
+    tbody.innerHTML = "";
+
     data.forEach(v => {
-      const row = `<tr>
-        <td>${v.ip}</td>
-        <td>${v.country}</td>
-        <td>${v.region}</td>
-        <td>${v.city}</td>
-        <td>${v.isp}</td>
-        <td>${v.os}</td>
-        <td>${v.page}</td>
-        <td>${v.referrer}</td>
-      </tr>`;
+      const mapLink = (v.latitude && v.longitude)
+        ? `<a href="https://www.google.com/maps?q=${v.latitude},${v.longitude}" target="_blank">View</a>`
+        : "-";
+
+      const row = `
+        <tr>
+          <td>${v.ip || "-"}</td>
+          <td>${v.country || "-"}</td>
+          <td>${v.region || "-"}</td>
+          <td>${v.city || "-"}</td>
+          <td>${v.timezone || "-"}</td>
+          <td>${v.isp || "-"}</td>
+          <td>${v.os || "-"}</td>
+          <td>${v.page || "-"}</td>
+          <td>${v.referrer || "-"}</td>
+          <td>${v.created_at ? new Date(v.created_at).toLocaleString() : "-"}</td>
+          <td>${mapLink}</td>
+        </tr>
+      `;
+
       tbody.innerHTML += row;
     });
+  })
+  .catch(err => {
+    document.body.innerHTML += "<p>Error loading data</p>";
   });
 </script>
+
 </body>
 </html>
