@@ -23,27 +23,37 @@
         }
 
         .container {
-            background: rgba(8, 29, 40, 0.85);
-            border-radius: 25px;
-            padding: 30px 40px 40px;
-            width: 90%;
-            max-width: 650px;
-            text-align: center;
-            animation: fadeIn 1.5s ease-in-out, neonShadow 4s linear infinite;
+    background: rgba(8, 29, 40, 0.85);
+    border-radius: 25px;
+    padding: 30px 40px 40px;
+    width: 90%;
+    max-width: 650px;
+    text-align: center;
+    animation: fadeIn 1.5s ease-in-out, neonShadow 4s linear infinite;
+}
+
+/* Single-color neon moving glow */
+@keyframes neonShadow {
+    10% {
+        box-shadow:
+            0 0 50px rgb(204, 255, 2),
+            0 0 30px rgb(255, 0, 0);
+    }
+    50% {
+        box-shadow:
+            0 0 25px rgba(0, 255, 26, 0.8),
+            0 0 50px rgb(255, 0, 0);
+    }
+    20% {
+        box-shadow:
+            0 0 15px rgb(98, 0, 255),
+            0 0 30px rgba(0, 255, 140, 0.6);
+    }
+}
+
         }
 
-        @keyframes neonShadow {
-            10% {
-                box-shadow: 0 0 50px rgb(204, 255, 2), 0 0 30px rgb(255, 0, 0);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(0, 255, 26, 0.8), 0 0 50px rgb(255, 0, 0);
-            }
-            20% {
-                box-shadow: 0 0 15px rgb(98, 0, 255), 0 0 30px rgba(0, 255, 140, 0.6);
-            }
-        }
-
+        /* ===== MENU ===== */
         .menu {
             display: flex;
             justify-content: center;
@@ -56,8 +66,14 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 1em;
+            transition: color 0.3s;
         }
 
+        .menu a:hover {
+            color: #ab7777;
+        }
+
+        /* ===== LOGO ===== */
         .logo-wrapper {
             display: flex;
             justify-content: center;
@@ -85,14 +101,18 @@
         h1 {
             color: #446822;
             font-size: 2.4em;
+            margin: 10px 0 15px;
         }
 
         marquee {
             color: #3875e5;
+            margin-bottom: 20px;
             font-weight: bold;
         }
 
+        /* ===== NEON BUTTONS ===== */
         .button {
+            position: relative;
             display: block;
             margin: 15px auto;
             padding: 15px 30px;
@@ -102,6 +122,59 @@
             font-weight: bold;
             background: #dd0404;
             border-radius: 30px;
+            z-index: 1;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .button::before {
+            content: "";
+            position: absolute;
+            inset: -3px;
+            background: linear-gradient(
+                90deg,
+                #5d00ff,
+                #ff00ff,
+                #00ff00,
+                #ff0000,
+                #00ffff
+            );
+            background-size: 400%;
+            border-radius: 35px;
+            z-index: -1;
+            animation: neonMove 2s linear infinite;
+        }
+
+        .button::after {
+            content: "";
+            position: absolute;
+            inset: 3px;
+            background: #0d255a;
+            border-radius: 27px;
+            z-index: -1;
+        }
+
+        .button:hover {
+            transform: scale(1.06);
+            box-shadow: 0 0 25px rgba(2, 252, 231, 0.9);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes neonMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glowMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
@@ -111,12 +184,15 @@
     <script src="https://cdn.prinsh.com/NathanPrinsley-effect/efek-salju.js"></script>
 
     <div class="container">
+
+        <!-- MENU -->
         <div class="menu">
             <a href="#">Home</a>
             <a href="#">About</a>
             <a href="#">Contact</a>
         </div>
 
+        <!-- LOGO -->
         <div class="logo-wrapper">
             <a href="https://syamdigital.vercel.app/" target="_blank" class="logo">
                 <img src="https://i.imgur.com/zL8iMBv.jpeg" alt="Logo">
@@ -124,6 +200,7 @@
         </div>
 
         <h1>SKS BOT - ˢʸᵃᵐ</h1>
+
         <marquee>Hey, how can I help you 🚀</marquee>
 
         <a href="https://syamdigital.vercel.app/" target="_blank" class="button">Don't click 🙈</a>
@@ -132,9 +209,7 @@
         <a href="https://chat.whatsapp.com/IefWr15BRvE8UD7Pi1jGev" target="_blank" class="button">Bot Group 🇮🇳</a>
         <a href="https://chat.whatsapp.com/IMP7bxQEnGz9hhgcJYSe6i" target="_blank" class="button">Bot Group 🌍</a>
         <a href="/Games" class="button">Games 🎮</a>
+
     </div>
-    <script>
-      fetch('/api/log');
-    </script>
 </body>
 </html>
