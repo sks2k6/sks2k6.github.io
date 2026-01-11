@@ -211,12 +211,11 @@
         <a href="/Games" class="button">Games 🎮.</a>
 
     </div>
- <script>
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(pos => {
-    fetch(`/api/log?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
-  });
-}
+<script>
+  const ref = document.referrer || "Direct";
+  const page = window.location.pathname;
+
+  fetch(`/api/log?page=${encodeURIComponent(page)}&ref=${encodeURIComponent(ref)}`);
 </script>
 
 </body>
