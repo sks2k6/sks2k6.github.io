@@ -22,38 +22,49 @@
             align-items: center;
         }
 
-        .container {
-    background: rgba(8, 29, 40, 0.85);
-    border-radius: 25px;
-    padding: 30px 40px 40px;
-    width: 90%;
-    max-width: 650px;
-    text-align: center;
-    animation: fadeIn 1.5s ease-in-out, neonShadow 4s linear infinite;
-}
-
-/* Single-color neon moving glow */
-@keyframes neonShadow {
-    10% {
-        box-shadow:
-            0 0 50px rgb(204, 255, 2),
-            0 0 30px rgb(255, 0, 0);
-    }
-    50% {
-        box-shadow:
-            0 0 25px rgba(0, 255, 26, 0.8),
-            0 0 50px rgb(255, 0, 0);
-    }
-    20% {
-        box-shadow:
-            0 0 15px rgb(98, 0, 255),
-            0 0 30px rgba(0, 255, 140, 0.6);
-    }
-}
-
+        /* Visitor counter style */
+        #visitorCount {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: black;
+            color: #00ff00;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: Arial, sans-serif;
+            z-index: 9999;
+            box-shadow: 0 0 10px #00ff00;
         }
 
-        /* ===== MENU ===== */
+        .container {
+            background: rgba(8, 29, 40, 0.85);
+            border-radius: 25px;
+            padding: 30px 40px 40px;
+            width: 90%;
+            max-width: 650px;
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out, neonShadow 4s linear infinite;
+        }
+
+        @keyframes neonShadow {
+            10% {
+                box-shadow:
+                    0 0 50px rgb(204, 255, 2),
+                    0 0 30px rgb(255, 0, 0);
+            }
+            50% {
+                box-shadow:
+                    0 0 25px rgba(0, 255, 26, 0.8),
+                    0 0 50px rgb(255, 0, 0);
+            }
+            20% {
+                box-shadow:
+                    0 0 15px rgb(98, 0, 255),
+                    0 0 30px rgba(0, 255, 140, 0.6);
+            }
+        }
+
         .menu {
             display: flex;
             justify-content: center;
@@ -73,7 +84,6 @@
             color: #ab7777;
         }
 
-        /* ===== LOGO ===== */
         .logo-wrapper {
             display: flex;
             justify-content: center;
@@ -110,7 +120,6 @@
             font-weight: bold;
         }
 
-        /* ===== NEON BUTTONS ===== */
         .button {
             position: relative;
             display: block;
@@ -159,7 +168,6 @@
             box-shadow: 0 0 25px rgba(2, 252, 231, 0.9);
         }
 
-        /* ===== ANIMATIONS ===== */
         @keyframes neonMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -181,36 +189,37 @@
 
 <body>
 
-    <script src="https://cdn.prinsh.com/NathanPrinsley-effect/efek-salju.js"></script>
+<!-- 👁️ Visitor counter -->
+<div id="visitorCount">👁️ Visitors: Loading...</div>
 
-    <div class="container">
+<script src="https://cdn.prinsh.com/NathanPrinsley-effect/efek-salju.js"></script>
 
-        <!-- MENU -->
-        <div class="menu">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </div>
-
-        <!-- LOGO -->
-        <div class="logo-wrapper">
-            <a href="https://syamdigital.vercel.app/" target="_blank" class="logo">
-                <img src="https://i.imgur.com/zL8iMBv.jpeg" alt="Logo">
-            </a>
-        </div>
-
-        <h1>SKS BOT - ˢʸᵃᵐ</h1>
-
-        <marquee>Hey, how can I help you 🚀</marquee>
-
-        <a href="https://syamdigital.vercel.app/" target="_blank" class="button">Don't click 🙈</a>
-        <a href="https://instagram.com/sksb0t" target="_blank" class="button">Instagram</a>
-        <a href="https://wa.me/917779879909?text=.menu" target="_blank" class="button">BOT Number</a>
-        <a href="https://chat.whatsapp.com/IefWr15BRvE8UD7Pi1jGev" target="_blank" class="button">Bot Group 🇮🇳</a>
-        <a href="https://chat.whatsapp.com/IMP7bxQEnGz9hhgcJYSe6i" target="_blank" class="button">Bot Group 🌍</a>
-        <a href="/Games" class="button">Games 🎮.</a>
-
+<div class="container">
+    <div class="menu">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
     </div>
+
+    <div class="logo-wrapper">
+        <a href="https://syamdigital.vercel.app/" target="_blank" class="logo">
+            <img src="https://i.imgur.com/zL8iMBv.jpeg" alt="Logo">
+        </a>
+    </div>
+
+    <h1>SKS BOT - ˢʸᵃᵐ</h1>
+
+    <marquee>Hey, how can I help you 🚀</marquee>
+
+    <a href="https://syamdigital.vercel.app/" target="_blank" class="button">Don't click 🙈</a>
+    <a href="https://instagram.com/sksb0t" target="_blank" class="button">Instagram</a>
+    <a href="https://wa.me/917779879909?text=.menu" target="_blank" class="button">BOT Number</a>
+    <a href="https://chat.whatsapp.com/IefWr15BRvE8UD7Pi1jGev" target="_blank" class="button">Bot Group 🇮🇳</a>
+    <a href="https://chat.whatsapp.com/IMP7bxQEnGz9hhgcJYSe6i" target="_blank" class="button">Bot Group 🌍</a>
+    <a href="/Games" class="button">Games 🎮.</a>
+</div>
+
+<!-- Logger -->
 <script>
   const ref = document.referrer || "Direct";
   const page = window.location.pathname;
@@ -220,6 +229,18 @@
   fetch(`/api/log?page=${encodeURIComponent(page)}&ref=${encodeURIComponent(ref)}&time=${encodeURIComponent(localTime)}&tz=${encodeURIComponent(timezone)}`);
 </script>
 
+<!-- Visitor count -->
+<script>
+fetch('/api/count')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("visitorCount").innerText =
+      "👁️ Visitors: " + data.total;
+  })
+  .catch(() => {
+    document.getElementById("visitorCount").innerText = "👁️ Visitors: ?";
+  });
+</script>
 
 </body>
 </html>
