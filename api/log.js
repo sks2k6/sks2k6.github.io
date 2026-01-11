@@ -14,8 +14,9 @@ export default async function handler(req, res) {
 
   try {
     // 🌍 Get geo + ISP data
-    const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
-    const geo = await geoRes.json();
+   const geoRes = await fetch(`https://ipwho.is/${ip}`);
+const geo = await geoRes.json();
+
 
     const data = {
       ip,
