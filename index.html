@@ -211,8 +211,13 @@
         <a href="/Games" class="button">Games 🎮.</a>
 
     </div>
-   <script>
-  fetch('/api/log?page=' + encodeURIComponent(window.location.pathname));
+ <script>
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(pos => {
+    fetch(`/api/log?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
+  });
+}
 </script>
+
 </body>
 </html>
