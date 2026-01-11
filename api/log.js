@@ -14,19 +14,18 @@ export default async function handler(req, res) {
 
   try {
     // 🌍 Get geo + ISP data
-   const geoRes = await fetch(`https://ipwho.is/${ip}`);
+// Geo lookup
+const geoRes = await fetch(`https://ipwho.is/${ip}`);
 const geo = await geoRes.json();
 
+const country = geo.country || null;
+const region = geo.region || null;
+const city = geo.city || null;
+const timezone = geo.timezone?.id || null;
+const isp = geo.connection?.isp || null;
+const latitude = geo.latitude || null;
+const longitude = geo.longitude || null;
 
-    const data = {
-      ip,
-      country: geo.country_name,
-      region: geo.region,
-      city: geo.city,
-      timezone: geo.timezone,
-      isp: geo.org,
-      latitude: geo.latitude,
-      longitude: geo.longitude,
       os: userAgent.includes("Android") ? "Android"
          : userAgent.includes("Windows") ? "Windows"
          : userAgent.includes("iPhone") ? "iOS"
