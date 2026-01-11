@@ -5,7 +5,7 @@
   <pre id="data">Loading...</pre>
 
   <script>
-    fetch('/api/visitors')   <!-- THIS MUST BE visitors, not log -->
+    fetch('/api/visitors')   // MUST be visitors, not log
       .then(res => res.json())
       .then(data => {
         document.getElementById('data').textContent =
