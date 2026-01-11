@@ -214,9 +214,12 @@
 <script>
   const ref = document.referrer || "Direct";
   const page = window.location.pathname;
+  const localTime = new Date().toISOString();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  fetch(`/api/log?page=${encodeURIComponent(page)}&ref=${encodeURIComponent(ref)}`);
+  fetch(`/api/log?page=${encodeURIComponent(page)}&ref=${encodeURIComponent(ref)}&time=${encodeURIComponent(localTime)}&tz=${encodeURIComponent(timezone)}`);
 </script>
+
 
 </body>
 </html>
