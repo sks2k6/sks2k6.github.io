@@ -1,3 +1,3 @@
 export default function handler(req, res) {
-  res.status(200).json(global.visitors || []);
+  res.status(200).json(globalThis.visitors || []);
 }
