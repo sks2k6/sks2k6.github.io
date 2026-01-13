@@ -22,6 +22,7 @@
             align-items: center;
         }
 
+        /* Visitor counter style */
         #visitorCount {
             position: fixed;
             top: 10px;
@@ -47,16 +48,47 @@
         }
 
         @keyframes neonShadow {
-            10% { box-shadow: 0 0 50px rgb(204, 255, 2), 0 0 30px rgb(255, 0, 0); }
-            50% { box-shadow: 0 0 25px rgba(0, 255, 26, 0.8), 0 0 50px rgb(255, 0, 0); }
-            20% { box-shadow: 0 0 15px rgb(98, 0, 255), 0 0 30px rgba(0, 255, 140, 0.6); }
+            10% {
+                box-shadow:
+                    0 0 50px rgb(204, 255, 2),
+                    0 0 30px rgb(255, 0, 0);
+            }
+            50% {
+                box-shadow:
+                    0 0 25px rgba(0, 255, 26, 0.8),
+                    0 0 50px rgb(255, 0, 0);
+            }
+            20% {
+                box-shadow:
+                    0 0 15px rgb(98, 0, 255),
+                    0 0 30px rgba(0, 255, 140, 0.6);
+            }
         }
 
-        .menu { display: flex; justify-content: center; gap: 25px; margin-bottom: 15px; }
-        .menu a { color: #63ad35; text-decoration: none; font-weight: bold; }
-        .menu a:hover { color: #ab7777; }
+        .menu {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 15px;
+        }
 
-        .logo-wrapper { display: flex; justify-content: center; margin-bottom: 15px; }
+        .menu a {
+            color: #63ad35;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: color 0.3s;
+        }
+
+        .menu a:hover {
+            color: #ab7777;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
 
         .logo {
             width: 120px;
@@ -69,27 +101,77 @@
             box-shadow: 0 0 25px rgba(168,85,247,0.9);
         }
 
-        .logo img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .logo img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-        h1 { color: #446822; font-size: 2.4em; margin: 10px 0 15px; }
+        h1 {
+            color: #446822;
+            font-size: 2.4em;
+            margin: 10px 0 15px;
+        }
 
-        marquee { color: #3875e5; margin-bottom: 20px; font-weight: bold; }
+        marquee {
+            color: #3875e5;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
 
         .button {
+            position: relative;
             display: block;
             margin: 15px auto;
             padding: 15px 30px;
             text-decoration: none;
             color: #fff;
+            font-size: 1.15em;
             font-weight: bold;
             background: #dd0404;
             border-radius: 30px;
+            z-index: 1;
+            overflow: hidden;
             transition: transform 0.3s;
+        }
+
+        .button::before {
+            content: "";
+            position: absolute;
+            inset: -3px;
+            background: linear-gradient(
+                90deg,
+                #5d00ff,
+                #ff00ff,
+                #00ff00,
+                #ff0000,
+                #00ffff
+            );
+            background-size: 400%;
+            border-radius: 35px;
+            z-index: -1;
+            animation: neonMove 2s linear infinite;
+        }
+
+        .button::after {
+            content: "";
+            position: absolute;
+            inset: 3px;
+            background: #0d255a;
+            border-radius: 27px;
+            z-index: -1;
         }
 
         .button:hover {
             transform: scale(1.06);
             box-shadow: 0 0 25px rgba(2, 252, 231, 0.9);
+        }
+
+        @keyframes neonMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         @keyframes glowMove {
@@ -107,6 +189,7 @@
 
 <body>
 
+<!-- 👁️ Visitor counter -->
 <div id="visitorCount">👁️ Visitors: Loading...</div>
 
 <script src="https://cdn.prinsh.com/NathanPrinsley-effect/efek-salju.js"></script>
@@ -125,6 +208,7 @@
     </div>
 
     <h1>SKS BOT - ˢʸᵃᵐ</h1>
+
     <marquee>Hey, how can I help you 🚀</marquee>
 
     <a href="https://syamdigital.vercel.app/" target="_blank" class="button">Don't click 🙈</a>
@@ -135,22 +219,17 @@
     <a href="/Games" class="button">Games 🎮</a>
 </div>
 
-<!-- ✅ Single logger -->
+<!-- Logger -->
 <script>
-(async () => {
-  const payload = {
-    page: location.pathname,
-    ref: document.referrer || "Direct",
-    time: new Date().toISOString(),
-    tz: Intl.DateTimeFormat().resolvedOptions().timeZone
-  };
+  const ref = document.referrer || "Direct";
+  const page = window.location.pathname;
+  const localTime = new Date().toISOString();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  const params = new URLSearchParams(payload).toString();
-  fetch(`/api/log?${params}`);
-})();
+  fetch(`/api/log?page=${encodeURIComponent(page)}&ref=${encodeURIComponent(ref)}&time=${encodeURIComponent(localTime)}&tz=${encodeURIComponent(timezone)}`);
 </script>
 
-<!-- ✅ Visitor counter -->
+<!-- Visitor count -->
 <script>
 fetch('/api/count')
   .then(res => res.json())
@@ -161,6 +240,26 @@ fetch('/api/count')
   .catch(() => {
     document.getElementById("visitorCount").innerText = "👁️ Visitors: ?";
   });
+</script>
+<script>
+(async () => {
+  const payload = {
+    page: location.pathname,
+    ref: document.referrer || "Direct",
+    time: new Date().toISOString(),
+    tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    lang: navigator.language,
+    screen: `${screen.width}x${screen.height}`,
+    viewport: `${innerWidth}x${innerHeight}`,
+    pixelRatio: window.devicePixelRatio || 1,
+    memory: navigator.deviceMemory || null,
+    cores: navigator.hardwareConcurrency || null,
+    connection: navigator.connection?.effectiveType || null
+  };
+
+  const params = new URLSearchParams(payload).toString();
+  fetch(`/api/log?${params}`);
+})();
 </script>
 
 </body>
