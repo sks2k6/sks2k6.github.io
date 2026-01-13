@@ -4,26 +4,18 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/visitors?select=*&order=created_at.desc`,
+      ${SUPABASE_URL}/rest/v1/visitors?select=*&order=created_at.desc,
       {
         headers: {
           apikey: SUPABASE_KEY,
-          Authorization: `Bearer ${SUPABASE_KEY}`,
-          "Content-Type": "application/json"
+          Authorization: Bearer ${SUPABASE_KEY}
         }
       }
     );
 
-    if (!response.ok) {
-      const text = await response.text();
-      throw new Error(text);
-    }
-
     const data = await response.json();
-    return res.status(200).json(data);
-
+    res.status(200).json(data);
   } catch (err) {
-    console.error("Visitors API error:", err);
-    return res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 }
