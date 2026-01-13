@@ -244,23 +244,27 @@ fetch('/api/count')
 <script>
 (async () => {
   const payload = {
-    page: location.pathname,
     ref: document.referrer || "Direct",
-    time: new Date().toISOString(),
-    tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    lang: navigator.language,
-    screen: `${screen.width}x${screen.height}`,
-    viewport: `${innerWidth}x${innerHeight}`,
-    pixelRatio: window.devicePixelRatio || 1,
-    memory: navigator.deviceMemory || null,
-    cores: navigator.hardwareConcurrency || null,
-    connection: navigator.connection?.effectiveType || null
+    tz: Intl.DateTimeFormat().resolvedOptions().timeZone
   };
 
   const params = new URLSearchParams(payload).toString();
   fetch(`/api/log?${params}`);
 })();
 </script>
+
+<script>
+fetch('/api/count')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("visitorCount").innerText =
+      "👁️ Visitors: " + data.total;
+  })
+  .catch(() => {
+    document.getElementById("visitorCount").innerText = "👁️ Visitors: ?";
+  });
+</script>
+
 
 </body>
 </html>
