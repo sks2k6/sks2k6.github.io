@@ -1,148 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="𝚂 𝚈 𝙰 𝙼">
-    <meta property="og:description" content="Connect with 𝖲𝖪𝖲 𝖡𝖮𝖳 !">
-    <meta property="og:image" content="https://i.imgur.com/zL8iMBv.jpeg">
-
-    <title>I am SYAM</title>
-
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #1f1c2c, #928dab);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Visitor counter style */
-        #visitorCount {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            background: black;
-            color: #00ff00;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-family: Arial, sans-serif;
-            z-index: 9999;
-            box-shadow: 0 0 10px #00ff00;
-        }
-
-        .container {
-            background: rgba(8, 29, 40, 0.85);
-            border-radius: 25px;
-            padding: 30px 40px 40px;
-            width: 90%;
-            max-width: 650px;
-            text-align: center;
-            animation: fadeIn 1.5s ease-in-out, neonShadow 4s linear infinite;
-        }
-
-        @keyframes neonShadow {
-            10% {
-                box-shadow:
-                    0 0 50px rgb(204, 255, 2),
-                    0 0 30px rgb(255, 0, 0);
-            }
-            50% {
-                box-shadow:
-                    0 0 25px rgba(0, 255, 26, 0.8),
-                    0 0 50px rgb(255, 0, 0);
-            }
-            20% {
-                box-shadow:
-                    0 0 15px rgb(98, 0, 255),
-                    0 0 30px rgba(0, 255, 140, 0.6);
-            }
-        }
-
-        .menu {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 15px;
-        }
-
-        .menu a {
-            color: #63ad35;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1em;
-            transition: color 0.3s;
-        }
-
-        .menu a:hover {
-            color: #ab7777;
-        }
-
-        .logo-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            padding: 5px;
-            background: linear-gradient(270deg, #a855f7, #7c3aed, #c084fc);
-            background-size: 400%;
-            animation: glowMove 5s linear infinite;
-            box-shadow: 0 0 25px rgba(168,85,247,0.9);
-        }
-
-        .logo img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        h1 {
-            color: #446822;
-            font-size: 2.4em;
-            margin: 10px 0 15px;
-        }
-
-        marquee {
-            color: #3875e5;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .button {
-            position: relative;
-            display: block;
-            margin: 15px auto;
-            padding: 15px 30px;
-            text-decoration: none;
-            color: #fff;
-            font-size: 1.15em;
-            font-weight: bold;
-            background: #dd0404;
-            border-radius: 30px;
-            z-index: 1;
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-
-        .button::before {
-            content: "";
-            position: absolute;
-            inset: -3px;
-            background: linear-gradient(
-                90deg,
-                #5d00ff,
+#5d00ff,
                 #ff00ff,
                 #00ff00,
                 #ff0000,
@@ -219,36 +75,27 @@
     <a href="/Games" class="button">Games 🎮</a>
 </div>
 
-<!-- Logger (fixed, only once) -->
+<!-- Logger -->
 <script>
-window.addEventListener("load", () => {
-  const payload = {
-    ref: document.referrer || "Direct",
-    tz: Intl.DateTimeFormat().resolvedOptions().timeZone
-  };
+  const ref = document.referrer || "Direct";
+  const page = window.location.pathname;
+  const localTime = new Date().toISOString();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  fetch("/api/log?" + new URLSearchParams(payload));
-});
+  fetch(/api/log?page=${encodeURIComponent(page)}&ref=${encodeURIComponent(ref)}&time=${encodeURIComponent(localTime)}&tz=${encodeURIComponent(timezone)});
 </script>
 
-<!-- Visitor count (fixed, only once) -->
+<!-- Visitor count -->
 <script>
-window.addEventListener("load", () => {
-  fetch("/api/count")
-    .then(res => {
-      if (!res.ok) throw new Error("API failed");
-      return res.json();
-    })
-    .then(data => {
-      document.getElementById("visitorCount").innerText =
-        "👁️ Visitors: " + (data.total ?? 0);
-    })
-    .catch(err => {
-      console.error("Counter error:", err);
-      document.getElementById("visitorCount").innerText =
-        "👁️ Visitors: Error";
-    });
-});
+fetch('/api/count')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("visitorCount").innerText =
+      "👁️ Visitors: " + data.total;
+  })
+  .catch(() => {
+    document.getElementById("visitorCount").innerText = "👁️ Visitors: ?";
+  });
 </script>
 
 </body>
