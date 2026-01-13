@@ -15,12 +15,11 @@
 
     #dashboard { display:none }
     header { padding:15px;background:#020617;font-size:20px }
-    .container { padding:20px }
+    .container { padding:20px;overflow-x:auto }
     table { width:100%;border-collapse:collapse;background:#020617 }
-    th,td { padding:10px;border-bottom:1px solid #1e293b;font-size:13px }
+    th,td { padding:10px;border-bottom:1px solid #1e293b;font-size:13px;white-space:nowrap }
     th { color:#38bdf8 }
     tr:hover { background:#1e293b }
-    .tag { background:#1e293b;padding:4px 8px;border-radius:6px }
   </style>
 </head>
 
@@ -45,10 +44,12 @@
           <th>IP</th>
           <th>Page</th>
           <th>Screen</th>
-          <th>Memory</th>
+          <th>Viewport</th>
+          <th>RAM</th>
           <th>Cores</th>
           <th>Network</th>
           <th>Language</th>
+          <th>Timezone</th>
           <th>Time</th>
         </tr>
       </thead>
@@ -65,7 +66,9 @@ function login() {
   if (user.value === USER && pass.value === PASS) {
     localStorage.setItem("admin", "true");
     show();
-  } else err.innerText = "Wrong login";
+  } else {
+    err.innerText = "Wrong login";
+  }
 }
 
 function show() {
@@ -85,17 +88,20 @@ async function load() {
   data.forEach(v => {
     tbody.innerHTML += `
       <tr>
-        <td>${v.ip}</td>
-        <td>${v.page}</td>
+        <td>${v.ip || "-"}</td>
+        <td>${v.page || "-"}</td>
         <td>${v.screen || "-"}</td>
+        <td>${v.viewport || "-"}</td>
         <td>${v.memory_gb || "-"}</td>
         <td>${v.cpu_cores || "-"}</td>
         <td>${v.connection || "-"}</td>
         <td>${v.language || "-"}</td>
+        <td>${v.timezone || "-"}</td>
         <td>${new Date(v.created_at).toLocaleString()}</td>
       </tr>`;
   });
 }
 </script>
+
 </body>
 </html>
