@@ -4,14 +4,14 @@
   <title>Visitor Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { margin:0; font-family:Arial; background:#0f172a; color:#e2e8f0; }
-    table { width:100%; border-collapse:collapse; background:#020617; }
-    th,td { padding:8px; border-bottom:1px solid #1e293b; font-size:13px; }
-    th { color:#38bdf8; }
-    .login { height:100vh; display:flex; justify-content:center; align-items:center; }
-    .box { background:#020617; padding:20px; border-radius:10px; width:300px; }
-    input,button { width:100%; padding:8px; margin:6px 0; }
-    #dash { display:none; }
+    body { margin:0;font-family:Arial;background:#0f172a;color:#e2e8f0 }
+    table { width:100%; border-collapse:collapse; background:#020617 }
+    th,td { padding:8px; border-bottom:1px solid #1e293b; font-size:12px }
+    th { color:#38bdf8 }
+    .login { height:100vh; display:flex; align-items:center; justify-content:center }
+    .box { background:#020617; padding:20px; border-radius:10px; width:300px }
+    input,button { width:100%; padding:8px; margin:6px 0 }
+    #dash { display:none }
   </style>
 </head>
 <body>
@@ -36,7 +36,9 @@
         <th>City</th>
         <th>Region</th>
         <th>Country</th>
+        <th>ISP</th>
         <th>Device</th>
+        <th>Referrer</th>
         <th>Visit Time</th>
       </tr>
     </thead>
@@ -65,24 +67,28 @@ if(localStorage.getItem("admin")) show();
 async function loadData(){
   const res = await fetch("/api/visitors");
   const data = await res.json();
-
   const tbody = document.getElementById("data");
   tbody.innerHTML="";
 
   data.forEach(v=>{
-    tbody.innerHTML+=`
+    const time = new Date(v.created_at).toLocaleString("en-US", {
+      timeZone: v.timezone || "UTC"
+    });
+
+    tbody.innerHTML += `
       <tr>
         <td>${v.id}</td>
         <td>${v.ip}</td>
-        <td>${v.city||"-"}</td>
-        <td>${v.region||"-"}</td>
-        <td>${v.country||"-"}</td>
-        <td>${v.user_agent}</td>
-        <td>${new Date(v.created_at).toLocaleString("en-IN",{timeZone:"Asia/Kolkata"})}</td>
+        <td>${v.city || "-"}</td>
+        <td>${v.region || "-"}</td>
+        <td>${v.country || "-"}</td>
+        <td>${v.isp || "-"}</td>
+        <td>${v.device || "-"}</td>
+        <td>${v.referrer || "-"}</td>
+        <td>${time}</td>
       </tr>`;
   });
 }
 </script>
-
 </body>
 </html>
