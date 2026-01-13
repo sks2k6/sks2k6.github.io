@@ -2,31 +2,42 @@ export default async function handler(req, res) {
   const SUPABASE_URL = "https://kjyzjgxusouthqxrebdt.supabase.co";
   const SUPABASE_KEY = "sb_publishable_sUEv6TQ39NRzaafzTPGpMQ_zufoSyMX";
 
-  const ip =
-    req.headers["x-forwarded-for"]?.split(",")[0] ||
-    req.socket?.remoteAddress ||
-    "unknown";
-
-  const page = req.query.page || "/";
-  const referrer = req.query.ref || "Direct";
-  const created_at = req.query.time || new Date().toISOString();
-
-  const data = {
-    ip,
-    page,
-    referrer,
-    created_at,
-    timezone: req.query.tz || null,
-    language: req.query.lang || null,
-    screen: req.query.screen || null,
-    viewport: req.query.viewport || null,
-    pixel_ratio: req.query.pixelRatio || null,
-    memory_gb: req.query.memory || null,
-    cpu_cores: req.query.cores || null,
-    connection: req.query.connection || null
-  };
-
   try {
+    // Get IP
+    const ip =
+      req.headers["x-forwarded-for"]?.split(",")[0] ||
+      req.socket?.remoteAddress ||
+      "unknown";
+
+    // Get user agent
+    const userAgent = req.headers["user-agent"] || "unknown";
+
+    // Timestamp
+    const created_at = new Date().toISOString();
+
+    // Optional: basic geo lookup (city + region)
+    let city = null;
+    let region = null;
+
+    try {
+      const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+      const geo = await geoRes.json();
+      city = geo.city || null;
+      region = geo.region || null;
+    } catch {
+      // ignore geo errors safely
+    }
+
+    // Data matches your Supabase columns
+    const data = {
+      ip,
+      user_agent: userAgent,
+      created_at,
+      city,
+      region
+    };
+
+    // Insert into Supabase
     await fetch(`${SUPABASE_URL}/rest/v1/visitors`, {
       method: "POST",
       headers: {
