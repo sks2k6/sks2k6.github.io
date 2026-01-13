@@ -9,11 +9,14 @@ export default async function handler(req, res) {
       "unknown";
 
     const user_agent = req.headers["user-agent"] || "unknown";
+    const referrer = req.query.ref || "Direct";
+    const timezone = req.query.tz || "UTC";
     const created_at = new Date().toISOString();
 
     let city = null;
     let region = null;
     let country = null;
+    let isp = null;
 
     try {
       const geoRes = await fetch(`https://ipwho.is/${ip}`);
@@ -23,15 +26,27 @@ export default async function handler(req, res) {
         city = geo.city || null;
         region = geo.region || null;
         country = geo.country || null;
+        isp = geo.connection?.isp || null;
       }
     } catch {}
 
+    let device = "Unknown";
+    if (/Android/.test(user_agent)) device = "Android";
+    else if (/iPhone/.test(user_agent)) device = "iPhone";
+    else if (/Windows/.test(user_agent)) device = "Windows PC";
+    else if (/Mac/.test(user_agent)) device = "Mac";
+    else if (/Linux/.test(user_agent)) device = "Linux";
+
     const data = {
       ip,
-      user_agent,
       city,
       region,
       country,
+      isp,
+      device,
+      user_agent,
+      referrer,
+      timezone,
       created_at
     };
 
