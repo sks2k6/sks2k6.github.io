@@ -1,94 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Visitor Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { margin:0;font-family:Arial;background:#0f172a;color:#e2e8f0 }
-    table { width:100%; border-collapse:collapse; background:#020617 }
-    th,td { padding:8px; border-bottom:1px solid #1e293b; font-size:12px }
-    th { color:#38bdf8 }
-    .login { height:100vh; display:flex; align-items:center; justify-content:center }
-    .box { background:#020617; padding:20px; border-radius:10px; width:300px }
-    input,button { width:100%; padding:8px; margin:6px 0 }
-    #dash { display:none }
-  </style>
+  <title>Visitor Logs</title>
 </head>
-<body>
+<body style="background:black;color:white;font-family:Arial">
 
-<div class="login" id="loginBox">
-  <div class="box">
-    <h3>Admin Login</h3>
-    <input id="user" placeholder="Username">
-    <input id="pass" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <div id="err" style="color:red"></div>
-  </div>
-</div>
-
-<div id="dash">
-  <h2 style="padding:10px">Visitor Dashboard</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>IP</th>
-        <th>City</th>
-        <th>Region</th>
-        <th>Country</th>
-        <th>ISP</th>
-        <th>Device</th>
-        <th>Referrer</th>
-        <th>Visit Time</th>
-      </tr>
-    </thead>
-    <tbody id="data"></tbody>
-  </table>
-</div>
+<h2>Visitor Logs</h2>
+<pre id="data">Loading...</pre>
 
 <script>
-const USER="sksbot", PASS="syamsyam";
-
-function login(){
-  if(user.value===USER && pass.value===PASS){
-    localStorage.setItem("admin","1");
-    show();
-  } else err.innerText="Wrong login";
-}
-
-function show(){
-  loginBox.style.display="none";
-  dash.style.display="block";
-  loadData();
-}
-
-if(localStorage.getItem("admin")) show();
-
-async function loadData(){
-  const res = await fetch("/api/visitors");
-  const data = await res.json();
-  const tbody = document.getElementById("data");
-  tbody.innerHTML="";
-
-  data.forEach(v=>{
-    const time = new Date(v.created_at).toLocaleString("en-US", {
-      timeZone: v.timezone || "UTC"
-    });
-
-    tbody.innerHTML += `
-      <tr>
-        <td>${v.id}</td>
-        <td>${v.ip}</td>
-        <td>${v.city || "-"}</td>
-        <td>${v.region || "-"}</td>
-        <td>${v.country || "-"}</td>
-        <td>${v.isp || "-"}</td>
-        <td>${v.device || "-"}</td>
-        <td>${v.referrer || "-"}</td>
-        <td>${time}</td>
-      </tr>`;
+fetch("/api/visitors")
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById("data").innerText =
+      JSON.stringify(data, null, 2);
   });
-}
 </script>
+
 </body>
 </html>
