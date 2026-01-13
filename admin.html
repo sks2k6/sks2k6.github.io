@@ -166,7 +166,7 @@ if (localStorage.getItem("adminLogin") === "true") {
 
 async function loadData() {
   try {
-    const res = await fetch("/api/getVisitors");
+    const res = await fetch("/api/visitors.js");
     const data = await res.json();
 
     const tbody = document.getElementById("data");
