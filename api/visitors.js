@@ -14,9 +14,8 @@ export default async function handler(req, res) {
       }
     );
 
-    const text = await response.text();
-
-    res.status(200).send(text);
+   const data = await response.json();
+res.status(200).json(data);
 
   } catch (err) {
     res.status(500).json({ error: err.message });
