@@ -14,9 +14,16 @@ export default async function handler(req, res) {
       }
     );
 
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text);
+    }
+
     const data = await response.json();
-    res.status(200).json(data);
+    return res.status(200).json(data);
+
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Visitors API error:", err);
+    return res.status(500).json({ error: err.message });
   }
 }
