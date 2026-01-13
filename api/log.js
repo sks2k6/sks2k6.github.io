@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     let region = null;
 
     try {
-      const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+      const geoRes = await fetch(`https://ipwho.is/${ip}`);
       const geo = await geoRes.json();
       city = geo.city || null;
       region = geo.region || null;
