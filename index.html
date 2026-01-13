@@ -219,30 +219,9 @@
     <a href="/Games" class="button">Games 🎮</a>
 </div>
 
-<!-- Logger -->
+<!-- Logger (only once, fixed) -->
 <script>
-  const ref = document.referrer || "Direct";
-  const page = window.location.pathname;
-  const localTime = new Date().toISOString();
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-  fetch(`/api/log?page=${encodeURIComponent(page)}&ref=${encodeURIComponent(ref)}&time=${encodeURIComponent(localTime)}&tz=${encodeURIComponent(timezone)}`);
-</script>
-
-<!-- Visitor count -->
-<script>
-fetch('/api/count')
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("visitorCount").innerText =
-      "👁️ Visitors: " + data.total;
-  })
-  .catch(() => {
-    document.getElementById("visitorCount").innerText = "👁️ Visitors: ?";
-  });
-</script>
-<script>
-(async () => {
+(() => {
   const payload = {
     ref: document.referrer || "Direct",
     tz: Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -251,6 +230,10 @@ fetch('/api/count')
   const params = new URLSearchParams(payload).toString();
   fetch(`/api/log?${params}`);
 })();
+</script>
+
+<!-- Visitor count (only once, fixed) -->
+<script>
 fetch('/api/count')
   .then(res => res.json())
   .then(data => {
