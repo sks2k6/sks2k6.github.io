@@ -1,72 +1,237 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Visitor Logs</title>
+  <title>Visitor Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <style>
-    body { font-family: Arial; }
-    table { border-collapse: collapse; width: 100%; font-size: 12px; }
-    th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
-    th { background: #222; color: white; position: sticky; top: 0; }
-    tr:nth-child(even) { background: #f5f5f5; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    /* ===== LOGIN ===== */
+    .login-box {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-card {
+      background: #020617;
+      padding: 30px;
+      border-radius: 15px;
+      width: 320px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      text-align: center;
+    }
+
+    .login-card h2 {
+      margin-bottom: 20px;
+    }
+
+    .login-card input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: none;
+      background: #1e293b;
+      color: white;
+      outline: none;
+    }
+
+    .login-card button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background: #38bdf8;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .error {
+      color: red;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    /* ===== DASHBOARD ===== */
+    #dashboard {
+      display: none;
+    }
+
+    header {
+      padding: 20px;
+      background: #020617;
+      font-size: 22px;
+      font-weight: bold;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    input.search {
+      padding: 10px;
+      width: 100%;
+      border-radius: 8px;
+      border: none;
+      background: #1e293b;
+      color: white;
+      margin-bottom: 15px;
+      outline: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #020617;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #1e293b;
+      font-size: 14px;
+    }
+
+    th {
+      background: #0f172a;
+      color: #38bdf8;
+    }
+
+    tr:hover {
+      background: #1e293b;
+    }
+
+    .tag {
+      background: #1e293b;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      color: #64748b;
+    }
   </style>
 </head>
+
 <body>
 
-<h2>Visitor Logs</h2>
+<!-- ============ LOGIN PAGE ============ -->
+<div class="login-box" id="loginBox">
+  <div class="login-card">
+    <h2>🔐 Admin Login</h2>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <div class="error" id="error"></div>
+  </div>
+</div>
 
-<table id="table">
-  <thead>
-    <tr>
-      <th>IP</th>
-      <th>Country</th>
-      <th>Region</th>
-      <th>City</th>
-      <th>Timezone</th>
-      <th>ISP</th>
-      <th>OS</th>
-      <th>Page</th>
-      <th>Referrer</th>
-      <th>Time</th>
-      <th>Map</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard">
+
+  <header>📊 Visitor Dashboard</header>
+
+  <div class="container">
+    <input class="search" id="search" placeholder="Search IP, country, browser..." onkeyup="filterTable()">
+
+    <table>
+      <thead>
+        <tr>
+          <th>IP</th>
+          <th>Country</th>
+          <th>City</th>
+          <th>Device</th>
+          <th>Browser</th>
+          <th>OS</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody id="data">
+        <tr><td colspan="7">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>Private Admin Panel • SKS BOT</footer>
+</div>
 
 <script>
-fetch('/api/visitors')
-  .then(res => res.json())
-  .then(data => {
-    const tbody = document.querySelector("#table tbody");
-    tbody.innerHTML = "";
+/* ===== LOGIN SYSTEM ===== */
+const USERNAME = "sksbot";
+const PASSWORD = "syamsyam";
 
-    data.forEach(v => {
-      const mapLink = (v.latitude && v.longitude)
-        ? `<a href="https://www.google.com/maps?q=${v.latitude},${v.longitude}" target="_blank">View</a>`
-        : "-";
+function login() {
+  const u = document.getElementById("username").value;
+  const p = document.getElementById("password").value;
 
-      const row = `
-        <tr>
-          <td>${v.ip || "-"}</td>
-          <td>${v.country || "-"}</td>
-          <td>${v.region || "-"}</td>
-          <td>${v.city || "-"}</td>
-          <td>${v.timezone || "-"}</td>
-          <td>${v.isp || "-"}</td>
-          <td>${v.os || "-"}</td>
-          <td>${v.page || "-"}</td>
-          <td>${v.referrer || "-"}</td>
-          <td>${v.created_at ? new Date(v.created_at).toLocaleString() : "-"}</td>
-          <td>${mapLink}</td>
-        </tr>
-      `;
+  if (u === USERNAME && p === PASSWORD) {
+    localStorage.setItem("adminLogged", "true");
+    showDashboard();
+  } else {
+    document.getElementById("error").innerText = "Invalid login!";
+  }
+}
 
-      tbody.innerHTML += row;
-    });
-  })
-  .catch(err => {
-    document.body.innerHTML += "<p>Error loading data</p>";
+function showDashboard() {
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
+  loadData();
+}
+
+if (localStorage.getItem("adminLogged") === "true") {
+  showDashboard();
+}
+
+/* ===== LOAD VISITORS ===== */
+async function loadData() {
+  const res = await fetch("/api/getVisitors");
+  const data = await res.json();
+
+  const tbody = document.getElementById("data");
+  tbody.innerHTML = "";
+
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="7">No visitors yet</td></tr>`;
+    return;
+  }
+
+  data.reverse().forEach(v => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${v.ip || "-"}</td>
+      <td><span class="tag">${v.country || "-"}</span></td>
+      <td>${v.city || "-"}</td>
+      <td>${v.device || "-"}</td>
+      <td>${v.browser || "-"}</td>
+      <td>${v.os || "-"}</td>
+      <td>${new Date(v.created_at).toLocaleString()}</td>
+    `;
+    tbody.appendChild(row);
   });
+}
+
+function filterTable() {
+  const value = document.getElementById("search").value.toLowerCase();
+  document.querySelectorAll("tbody tr").forEach(row => {
+    row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+  });
+}
 </script>
 
 </body>
