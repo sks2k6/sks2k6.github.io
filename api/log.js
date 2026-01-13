@@ -7,8 +7,6 @@ export default async function handler(req, res) {
     req.socket?.remoteAddress ||
     "unknown";
 
-  const ua = req.headers["user-agent"] || "";
-
   const page = req.query.page || "/";
   const referrer = req.query.ref || "Direct";
   const created_at = req.query.time || new Date().toISOString();
@@ -25,8 +23,7 @@ export default async function handler(req, res) {
     pixel_ratio: req.query.pixelRatio || null,
     memory_gb: req.query.memory || null,
     cpu_cores: req.query.cores || null,
-    connection: req.query.connection || null,
-    user_agent: ua
+    connection: req.query.connection || null
   };
 
   try {
