@@ -22,8 +22,9 @@ export default async function handler(req, res) {
     try {
       const geoRes = await fetch(`https://ipwho.is/${ip}`);
       const geo = await geoRes.json();
-      city = geo.city || null;
-      region = geo.region || null;
+     city = geo.city || null;
+region = geo.region || null;
+;
     } catch {
       // ignore geo errors safely
     }
