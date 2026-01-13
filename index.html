@@ -251,9 +251,6 @@ fetch('/api/count')
   const params = new URLSearchParams(payload).toString();
   fetch(`/api/log?${params}`);
 })();
-</script>
-
-<script>
 fetch('/api/count')
   .then(res => res.json())
   .then(data => {
