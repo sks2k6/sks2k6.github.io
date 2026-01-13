@@ -241,6 +241,26 @@ fetch('/api/count')
     document.getElementById("visitorCount").innerText = "👁️ Visitors: ?";
   });
 </script>
+<script>
+(async () => {
+  const payload = {
+    page: location.pathname,
+    ref: document.referrer || "Direct",
+    time: new Date().toISOString(),
+    tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    lang: navigator.language,
+    screen: `${screen.width}x${screen.height}`,
+    viewport: `${innerWidth}x${innerHeight}`,
+    pixelRatio: window.devicePixelRatio || 1,
+    memory: navigator.deviceMemory || null,
+    cores: navigator.hardwareConcurrency || null,
+    connection: navigator.connection?.effectiveType || null
+  };
+
+  const params = new URLSearchParams(payload).toString();
+  fetch(`/api/log?${params}`);
+})();
+</script>
 
 </body>
 </html>
