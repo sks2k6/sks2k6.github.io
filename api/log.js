@@ -7,50 +7,29 @@ export default async function handler(req, res) {
     req.socket?.remoteAddress ||
     "unknown";
 
-  const userAgent = req.headers["user-agent"] || "unknown";
+  const ua = req.headers["user-agent"] || "";
 
-  // Values sent from browser
   const page = req.query.page || "/";
   const referrer = req.query.ref || "Direct";
-  const visitTime = req.query.time || new Date().toISOString();
-  const clientTimezone = req.query.tz || null;
+  const created_at = req.query.time || new Date().toISOString();
+
+  const data = {
+    ip,
+    page,
+    referrer,
+    created_at,
+    timezone: req.query.tz || null,
+    language: req.query.lang || null,
+    screen: req.query.screen || null,
+    viewport: req.query.viewport || null,
+    pixel_ratio: req.query.pixelRatio || null,
+    memory_gb: req.query.memory || null,
+    cpu_cores: req.query.cores || null,
+    connection: req.query.connection || null,
+    user_agent: ua
+  };
 
   try {
-    // 🌍 Geo lookup
-    const geoRes = await fetch(`https://ipwho.is/${ip}`);
-    const geo = await geoRes.json();
-
-    const country = geo.country || null;
-    const region = geo.region || null;
-    const city = geo.city || null;
-    const isp = geo.connection?.isp || null;
-    const latitude = geo.latitude || null;
-    const longitude = geo.longitude || null;
-
-    // 🖥 OS detection
-    const os = userAgent.includes("Android") ? "Android"
-      : userAgent.includes("Windows") ? "Windows"
-      : userAgent.includes("iPhone") || userAgent.includes("iOS") ? "iOS"
-      : userAgent.includes("Mac") ? "Mac"
-      : "Other";
-
-    // 📦 Final data object
-    const data = {
-      ip,
-      country,
-      region,
-      city,
-      timezone: clientTimezone,
-      isp,
-      latitude,
-      longitude,
-      os,
-      referrer,
-      page,
-      created_at: visitTime
-    };
-
-    // 💾 Save to Supabase
     await fetch(`${SUPABASE_URL}/rest/v1/visitors`, {
       method: "POST",
       headers: {
@@ -62,7 +41,6 @@ export default async function handler(req, res) {
     });
 
     res.status(200).json({ success: true });
-
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
