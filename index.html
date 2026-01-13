@@ -219,30 +219,37 @@
     <a href="/Games" class="button">Games 🎮</a>
 </div>
 
-<!-- Logger (only once, fixed) -->
+<!-- Logger (fixed, only once) -->
 <script>
-(() => {
+window.addEventListener("load", () => {
   const payload = {
     ref: document.referrer || "Direct",
     tz: Intl.DateTimeFormat().resolvedOptions().timeZone
   };
 
-  const params = new URLSearchParams(payload).toString();
-  fetch(`/api/log?${params}`);
-})();
+  fetch("/api/log?" + new URLSearchParams(payload));
+});
 </script>
 
-<!-- Visitor count (only once, fixed) -->
+<!-- Visitor count (fixed, only once) -->
 <script>
-fetch('/api/count')
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("visitorCount").innerText =
-      "👁️ Visitors: " + data.total;
-  })
-  .catch(() => {
-    document.getElementById("visitorCount").innerText = "👁️ Visitors: ?";
-  });
+window.addEventListener("load", () => {
+  fetch("/api/count")
+    .then(res => {
+      if (!res.ok) throw new Error("API failed");
+      return res.json();
+    })
+    .then(data => {
+      document.getElementById("visitorCount").innerText =
+        "👁️ Visitors: " + (data.total ?? 0);
+    })
+    .catch(err => {
+      console.error("Counter error:", err);
+      document.getElementById("visitorCount").innerText =
+        "👁️ Visitors: Error";
+    });
+});
 </script>
+
 </body>
 </html>
