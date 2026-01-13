@@ -3,42 +3,38 @@ export default async function handler(req, res) {
   const SUPABASE_KEY = "sb_publishable_sUEv6TQ39NRzaafzTPGpMQ_zufoSyMX";
 
   try {
-    // Get IP
     const ip =
       req.headers["x-forwarded-for"]?.split(",")[0] ||
       req.socket?.remoteAddress ||
       "unknown";
 
-    // Get user agent
-    const userAgent = req.headers["user-agent"] || "unknown";
-
-    // Timestamp
+    const user_agent = req.headers["user-agent"] || "unknown";
     const created_at = new Date().toISOString();
 
-    // Optional: basic geo lookup (city + region)
     let city = null;
     let region = null;
+    let country = null;
 
     try {
       const geoRes = await fetch(`https://ipwho.is/${ip}`);
       const geo = await geoRes.json();
-     city = geo.city || null;
-region = geo.region || null;
-;
-    } catch {
-      // ignore geo errors safely
-    }
 
-    // Data matches your Supabase columns
+      if (geo.success !== false) {
+        city = geo.city || null;
+        region = geo.region || null;
+        country = geo.country || null;
+      }
+    } catch {}
+
     const data = {
       ip,
-      user_agent: userAgent,
-      created_at,
+      user_agent,
       city,
-      region
+      region,
+      country,
+      created_at
     };
 
-    // Insert into Supabase
     await fetch(`${SUPABASE_URL}/rest/v1/visitors`, {
       method: "POST",
       headers: {
